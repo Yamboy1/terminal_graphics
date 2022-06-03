@@ -4,7 +4,7 @@ use std::fmt;
 
 pub struct CharPixel{
     //ESC[48;2;{r};{g};{b}m
-    top_colour : (u8, u8, u8),
+    top_colour: (u8, u8, u8),
     //ESC[38;2;{r};{g};{b}m 
     bottom_colour : (u8, u8, u8),
     pixel : String
