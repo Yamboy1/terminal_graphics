@@ -22,16 +22,16 @@ impl CharPixel{
 
     pub fn newfromtuple(f : (u8, u8, u8), b:(u8, u8, u8)) -> CharPixel{
         CharPixel{
-            top_colour : f,
-            bottom_colour : b,
+            top_colour : b,
+            bottom_colour : f,
             pixel : "▄".to_owned()
         }
     }
 
     pub fn new(fr: u8, fg: u8, fb: u8, br: u8, bg: u8, bb: u8) -> CharPixel{
         CharPixel{
-            top_colour : (fr, fg, fb),
-            bottom_colour : (br, bg, bb),
+            top_colour : (br, bg, bb),
+            bottom_colour : (fr, fg, fb),
             pixel : "▄".to_owned()
         }
     }
