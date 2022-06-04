@@ -2,20 +2,20 @@ extern crate termsize;
 extern crate image;
 use std::collections::VecDeque;
 
+use std::{thread, time};
+
 
 mod graphics_screen;
+mod cursor_controls;
+
 
 use graphics_screen::{char_pixel::CharPixel, char_pixel_screen::CharScreen};
 
-fn main() {
-    
-    let path = "src\\test4.png";
-
-    let im = image::open(path).unwrap().to_rgb8();
-    let dia_im = image::image_dimensions(path).unwrap();
+fn image_to_pixel_map(bytes : &[u8]) -> Vec<Vec<(u8, u8, u8)>>{
+    let im = image::load_from_memory(bytes).unwrap().to_rgb8();
+    let dia_im = (160, 120);
     let mut rgb : VecDeque<u8> = VecDeque::from(im.into_vec());
     let mut arr : Vec<Vec<(u8, u8, u8)>> = Vec::new();
-    println!("({}, {}, {})", rgb[0], rgb[1], rgb[2]);
 
     for i in 0..(dia_im.1){
         arr.push(Vec::new());
@@ -28,9 +28,44 @@ fn main() {
             )
         }
     }
-    let c : CharScreen = CharScreen::new_from_vecs(arr);
 
-    println!("{}", c);
+    arr
+}
+
+//\x1B[H
+
+
+
+fn main() {
+    print!("\x1B[2J");
+
+    let image_amout = 900;
+
+    let mut images : Vec<&[u8]> = Vec::new();
+
+
+    let mut vid_vec : Vec<CharScreen> = Vec::new();
+
+    let frame_time = time::Duration::from_millis(2);
+
+    for i in images{
+        vid_vec.push(CharScreen::new_from_vecs(image_to_pixel_map(i)));
+    }
+
+
+    cursor_controls::hide();
+
+    for i in vid_vec{
+        cursor_controls::home();
+        println!("{}", i);
+        thread::sleep(frame_time)
+
+    }
+    print!("\x1B[2J");
+    cursor_controls::home();
+    cursor_controls::show();
+
+
 }
 
 
